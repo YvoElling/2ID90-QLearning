@@ -86,9 +86,15 @@ public class QLearner {
     for (int i = 0; i < Q.length; ++i) {
         String bestAction = Integer.toString(getBestAction(Q[i]));
         if (bestAction.compareTo("-1") != 0) {
-            output += (bestAction + " ");
+            output += (bestAction);
+            if (i != Q.length -1) {
+                output += " ";
+            }
         } else {
-            output += "n ";
+            output += "n";
+            if (i != Q.length -1) {
+                output += " ";
+            }
         }
     }
     return output; // TODO compute policy

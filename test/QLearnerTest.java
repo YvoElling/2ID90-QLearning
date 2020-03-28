@@ -41,7 +41,7 @@ public class QLearnerTest {
         String result = instance.execute(reward, paths, 0d, 1);
         System.out.format(" [%s]\n",result);
         
-        assertPattern("n n n n n n ", result);
+        assertPattern("n n n n n n", result);
     }
     
     
