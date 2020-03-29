@@ -47,35 +47,39 @@ public class QLearner {
     /** do Q-learning for one path.  TODO complete documentation. */
     private void execute(Double[][] Q, Integer[][] rewards, Integer[] path, 
             Double gamma) {
-        for (int i = 0; i < path.length-1; ++i) {
-            int state = path[i];
-            int action = path[i+1];
+        for (int i = 1; i < path.length; ++i) {
+            int state = path[i-1];
+            int action = path[i];
             
             double reward = rewards[state][action];
 
             int nextState = action;
-            int nextBestAction = getBestAction(Q[nextState]);
+            int nextBestAction = getBestActionIndex(Q[nextState]);
             
             if (nextBestAction == -1) {
-                Q[state][action] = reward;
+                Q[state][action] = reward * 1d;
             } else {
-                Q[state][action] = reward + gamma * (rewards[nextState]
-                    [nextBestAction]);
+                Q[state][action] = reward + gamma*(Q[nextState]
+                        [nextBestAction]);
             }
                    
         }
     }
     
-    private int getBestAction(Double[] actions) {
+    private int getBestActionIndex(Double[] actions) {
         
-        int bestReward = -1;
+        int index = -1;
+        double bestAction = -1;
+        
         for(int i = 0; i < actions.length; ++i) {
-            if (actions[i] != null && (bestReward == -1 
-                    || actions[i] > actions[bestReward])){ 
-                bestReward = i;
+            if (actions[i] != null) {
+                if (actions[i] > bestAction) {
+                    bestAction = actions[i];
+                    index = i;
+                }
             }
         }
-        return bestReward;
+        return index;
     }
 
     /**
@@ -84,7 +88,7 @@ public class QLearner {
     private String policy(Double[][] Q) {   
     String output = "";
     for (int i = 0; i < Q.length; ++i) {
-        String bestAction = Integer.toString(getBestAction(Q[i]));
+        String bestAction = Integer.toString(getBestActionIndex(Q[i]));
         if (bestAction.compareTo("-1") != 0) {
             output += (bestAction);
             if (i != Q.length -1) {
